@@ -97,6 +97,35 @@
       // .data('') DOM要素にあるdata-~を取得できる
       // .change() セレクトボックスの値の変更をキャッチする関数
       // $().each() DOM要素を1つずつループ処理をする（ループ内で$(this)を使うと要素がひとつずつ取得できる）
+
+      $(function() {
+
+        $('.select').change(function() {
+          var lang = $(this).val();
+          // console.log(lang);
+          if (lang === 'all') {
+            $('.article').parent().show();
+          } else {
+
+            $('.article').each(function(){
+            var article = $(this).parent().data('category-type');
+            // console.log(article);
+
+               if (article === lang) {
+                 $(this).parent().show();
+               } else {
+                 $(this).parent().hide();
+               }
+            });
+          }
+
+        });
+
+        // $('.article').each(function(){
+        //    console.log($(this).parent().data('category-type'));
+        // });
+
+      });
     </script>
   </body>
 </html>
