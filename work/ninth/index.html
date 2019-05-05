@@ -37,9 +37,63 @@
       // そのため、次の行でconsole.log(data)をすると中身のオブジェクトが確認できます。
       //
       // [テンプレート]
+
+
       // <li class="colorList__item">
-      //   <p class="colorList__title" style="background-color: ;"></p>
+      //   <p class="colorList__title" style="background-color:red;"></p>
       // </li>
+
+
+
+
+      $(function() {
+
+        $.ajax({
+          url: './data.json'
+        }).done(function(json) {
+          for(var i=0; i < json.colorsArray.length; i++) {
+            var color = (json.colorsArray[i].hexValue);
+            var title = (json.colorsArray[i].colorName);
+
+
+            var colorList = $('<li class="colorList__item">').append('<p class="colorList__title" style="background-color:' + color + ';">' + title + '</p>');
+            $('.colorList').append(colorList);
+        }
+        });
+      });
+
+
+        // $.ajax({
+        //   type: 'GET',
+        // 	url: './data.json',
+        //   data: {name: 'colorName'},
+        // 	dataType: 'json',
+        // 	success: function(data){
+        //     var len = data.length;
+        //     for(var i=0; i < len; i++){
+        //       console.log(data[i].colorName);
+        //     }
+        //   }
+        // });
+        //
+        // $.each(data, function(i){
+        //   console.log(data[i].colorName + "[]" + data[i].hexValue);
+        //     });
+        //   }
+        // });
+        // .done(function(
+        //   for(var i in data){
+        //       var colorName = data[i].colorName;
+        //       console.log(colorName);
+              // var hexValue = data[i].hexValue;
+              // console.log(hexValue);
+          // });
+
+
+        // var colorList = $('<li class="colorList__item">').append('<p class="colorList__title" style="background-color:' + color + ';"></p>');
+        // $('.colorList').append(colorList);
+
+      // });
       //
       // このテンプレートに取得してきた中身を入れて表示します。
     </script>
