@@ -34,6 +34,54 @@
       // .data() 要素のdata属性を取得します。
       // .width() 要素の幅を取得します。
       // .length 要素の個数を取得します。
+
+      $(function() {
+
+        var width = $('.slider-list').children().width();
+        console.log(width);
+
+        var length = $('.slider-list').children().length;
+        // lengthはプロパティであり、メソッドではないため、lengthの後ろにカッコ()を付けないということを覚えておきましょう
+        console.log(length);
+
+        var array = [];
+
+        var num = 1;
+
+          $('.is-prev').click(function() {
+            if (num === 1) {
+              num = length;
+              console.log(num);
+              $('.slider-list').animate({
+                'left': '-=' + (length - 1) * width + 'px'
+                });
+            } else if (num > 1 && num <= length) {
+              num -= 1;
+              console.log(num);
+              $('.slider-list').animate({
+                'left': '+=' + width + 'px'
+              });
+            }
+          });
+
+          $('.is-next').click(function() {
+            if (num < length && num >= 1) {
+              num += 1;
+              console.log(num);
+              $('.slider-list').animate({
+                'left': '-=' + width + 'px'
+              });
+            } else if (num === length) {
+              num = 1;
+              console.log(num);
+              $('.slider-list').animate({
+                'left': '+=' + (length - 1) * width + 'px'
+              });
+            }
+          });
+
+      });
     </script>
+
   </body>
 </html>
