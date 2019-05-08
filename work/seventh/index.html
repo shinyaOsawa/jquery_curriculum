@@ -38,49 +38,122 @@
       $(function() {
 
         var width = $('.slider-list').children().width();
-        console.log(width);
+        // console.log(width);
 
         var length = $('.slider-list').children().length;
         // lengthはプロパティであり、メソッドではないため、lengthの後ろにカッコ()を付けないということを覚えておきましょう
-        console.log(length);
+        // console.log(length);
 
         var array = [];
+        for (i=0; i<length; i++) {
+          array.push(-600 * i);
+        }
+        // console.log(array);
 
-        var num = 1;
+        var num = 0;
+        var clickFlg = true;
 
+//戻るボタンを押した際のクリックイベント
           $('.is-prev').click(function() {
-            if (num === 1) {
-              num = length;
-              console.log(num);
-              $('.slider-list').animate({
-                'left': '-=' + (length - 1) * width + 'px'
+            if (clickFlg === true) {
+              clickFlg = false;
+              // console.log(clickFlg);
+                if (num === 0) {
+                  //戻るボタンを押した時、num===0が、一番左の画像の時を表す。
+                  num = length-1;
+                  // console.log(num);
+                  // console.log(array[num]);
+                } else {
+                  num -= 1;
+                  // console.log(num);
+                }
+                $('.slider-list').animate({
+                  'left': array[num] + 'px'
+                }, function() {
+                    clickFlg = true;
+                    // console.log(clickFlg);
                 });
-            } else if (num > 1 && num <= length) {
-              num -= 1;
-              console.log(num);
-              $('.slider-list').animate({
-                'left': '+=' + width + 'px'
-              });
-            }
-          });
+              } else {
+                return false;
+              }
+          });  //クリックイベントの閉じ括弧
 
+//進むボタンを押した際のクリックイベント
           $('.is-next').click(function() {
-            if (num < length && num >= 1) {
-              num += 1;
-              console.log(num);
-              $('.slider-list').animate({
-                'left': '-=' + width + 'px'
-              });
-            } else if (num === length) {
-              num = 1;
-              console.log(num);
-              $('.slider-list').animate({
-                'left': '+=' + (length - 1) * width + 'px'
-              });
-            }
-          });
+            if (clickFlg === true) {
+              clickFlg = false;
+
+              if (num === length-1) {
+                //num===length-1が、一番右の画像の時を表す。
+                num = 0;
+                console.log(num);
+              } else {
+                num += 1;
+                console.log(num);
+              }
+            $('.slider-list').animate({
+              'left': array[num] + 'px'
+            }, function() {
+              clickFlg = true;
+            });
+          } else {
+            return false;
+          }
+        }); //クリックイベントの閉じ括弧
 
       });
+
+
+      // $(function() {
+      //
+      //   var width = $('.slider-list').children().width();
+      //   // console.log(width);
+      //
+      //   var length = $('.slider-list').children().length;
+      //   // lengthはプロパティであり、メソッドではないため、lengthの後ろにカッコ()を付けないということを覚えておきましょう
+      //   // console.log(length);
+      //
+      //   var array = [];
+      //   for (i=0; i<length; i++) {
+      //     array.push(600 * i);
+      //   }
+      //   // console.log(array);
+      //
+      //   var num = 1;
+      //
+      //     $('.is-prev').click(function() {
+      //       if (num === 1) {
+      //         num = length;
+      //         console.log(num);
+      //         $('.slider-list').animate({
+      //           'left': '-=' + (length - 1) * width + 'px'
+      //           });
+      //       } else if (num > 1 && num <= length) {
+      //         num -= 1;
+      //         console.log(num);
+      //         $('.slider-list').animate({
+      //           'left': '+=' + width + 'px'
+      //         });
+      //       }
+      //     });
+      //
+      //     $('.is-next').click(function() {
+      //       if (num < length && num >= 1) {
+      //         num += 1;
+      //         console.log(num);
+      //         $('.slider-list').animate({
+      //           'left': '-=' + width + 'px'
+      //         });
+      //       } else if (num === length) {
+      //         num = 1;
+      //         console.log(num);
+      //         $('.slider-list').animate({
+      //           'left': '+=' + (length - 1) * width + 'px'
+      //         });
+      //       }
+      //     });
+      //
+      // });
     </script>
 
   </body>
