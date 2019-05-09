@@ -100,21 +100,28 @@
 
       $(function() {
 
+        //.change() セレクトボックスの値の変更をキャッチする関数
+        //発火はセレクトボックス（class="select")の値の変更
         $('.select').change(function() {
+          //val()メソッドで、セレクトボックスのvalue属性を取得。
           var lang = $(this).val();
           // console.log(lang);
+          //セレクトボックスの値がallであれば、全てのarticleクラスの親クラスであるliタグを表示させる。
           if (lang === 'all') {
-            $('.article').parent().show();
+            $('.list').children().show();
           } else {
 
-            $('.article').each(function(){
-            var article = $(this).parent().data('category-type');
-            // console.log(article);
+            //each(function())の第１引数にはindex番号、第２引数にはvalueが渡される。
+            $('.list').children().each(function(index, value){
+              //().each()にて、ループのたびにarticleクラスのカスタムデータ属性を変数categoryTypeに格納。
+            var categoryType = $(value).data('category-type');
+            // console.log(categoryType);
 
-               if (article === lang) {
-                 $(this).parent().show();
+            //articleクラスのカスタムデータ属性ととセレクトボックスの値が一致している場合は、articleクラスの親要素を表示、不一致の場合は非表示。
+               if (categoryType === lang) {
+                 $(value).show();
                } else {
-                 $(this).parent().hide();
+                 $(value).hide();
                }
             });
           }
