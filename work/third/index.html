@@ -32,9 +32,10 @@
       // .addClass() クラスを追加します。
       // .removeClass() クラスを削除します。
 
-      $('.nav > li').click(function(){
         // (>) .navクラスの直下子要素のli
-        let num = $('.nav > li').index(this);
+      $('.nav > li').click(function(){
+        //
+        let num = $(this).index();
         // console.log(num);
         $('.contents > li').addClass('is-hidden').eq(num).removeClass('is-hidden');
         // $('.contents > li').addClass('is-hidden');

@@ -71,49 +71,66 @@
 <script>
 $(function() {
 // 第1問  id='q1'の要素の文字色を赤色にせよ。
+  //頭に#をつけてidを指定。css()メソッドにて、colorプロパティの値をredに変更する。
   $("#q1").css('color', 'red');
 
 // 第2問  id='q2'の要素をクリックしたら背景色をピンクにせよ。
+  //clickメソッドを用いて、指定された要素がクリックされたと同時に引数に指定した関数を実行。
   $('#q2').click(function() {
+    //クリックメソッド内で指定されたthisは、クリックイベントが発生した要素を指す。
     $(this).css('background-color', '#ffc0cb');
   });
 
 // 第3問  id='q3'の要素をクリックしたら2秒かけてフェードアウトさせよ。
-  $('#q3').click(fadeOut);
-  function fadeOut() {
+  $('#q3').click(fadeout);
+    function fadeout(){
+    //fadeOut()メソッドは、引数に指定した時間（ミリ秒）で、フェードアウトする。
     $(this).fadeOut(2000);
   }
 
+
 // 第4問  id='q4'の要素をクリックしたらこの要素の前後とこの要素内の前後にテキストを挿入せよ。
   $('#q4').click(function() {
+    //thisに対するメソッドを、メソッドチェーンにてつなげて描く。メソッドは順番通りに実行される。
     $(this)
-    .before('/before/')
-    .after('/after/')
-    .prepend('/prepend/')
-    .append('/append/');
+    //.before() 要素の前にコンテンツを挿入する。
+    .before('<p>before</p>')
+    //.after() 要素の後にコンテンツを挿入する。
+    .after('after')
+    //.prepend() 要素内の先頭にコンテンツを追加する。
+    .prepend('<p>prepend</p>')
+    //.append() 要素内の末尾にコンテンツを挿入する。
+    .append('append');
   });
 
 // 第5問  id='q5'の要素をクリックしたらこの要素にlargeというクラスを付与せよ。
   $('#q5').click(function() {
+    //addClass() 引数で指定したclassを追加する。
     $(this).addClass('large');
   });
 
 // 第6問  id='q6'の要素をクリックしたらこの要素を2秒かけてmargin-topとmargin-leftを100pxの位置に移動させよ。
   $('#q6').click(function() {
+    //animate({ }, ミリ秒)。メソッドなので後ろに()を伴うが、ここにobjectオブジェクトを設定する必要がある。
+    //animateメソッドで操作できる属性は、width,height,left,top,opacityなど、１０進数の値で設定できるものに限られる。また、属性名にハイフンが含まれるものはハイフンを外して続く最初の文字を大文字にする（いわゆるキャメルケースの形）。
     $(this).animate({
-      'marginLeft': 100,
-      'marginTop': 100
+      marginTop: "100px",
+      marginLeft: "100px"
     }, 2000);
   });
 
 // 第7問  id='q7'の子要素をクリックしたら、その要素のインデックス（何番目か）をconsole.log()とalert()を用いて表示させよ。
+  //【 対象要素.find( 目的の要素 ) 】 子孫要素を辿り、引数に指定した要素を取得する。
+  //$(‘セレクタ’).index(); 要素の順番(インデックス番号)を取得する。
   $('#q7').find('li').click(function() {
     var num = $(this).index();
     console.log(num);
     alert(num);
   });
 
+
 // 第8問  id='q8'の要素をhoverしたらlargeというクラスを付与し、hoverが外れたら、クラスを削除せよ。
+  //hover 引数を二つとることができて、第一引数に設定するfunctionはマウスカーソルが要素内に入ったときに実行され、第二引数に設定するfunctionはマウスカーソルが要素内から出たときに実行されます。
 $('#q8').hover(function() {
   $(this).addClass('large');
 }, function() {
@@ -122,6 +139,7 @@ $('#q8').hover(function() {
 
 // 第9問  id='q9'の要素をクリックしたらこの要素に設定してあるdata属性をconsoleに表示せよ。
 $('#q9').click(function() {
+  //対象要素.data('属性名')で、属性名が一致したdata属性を取得する。
   var text = $(this).data('text');
   console.log(text);
 });
@@ -129,6 +147,7 @@ $('#q9').click(function() {
 // 第10問 id='q10'の子要素をクリックしたら、その要素のインデックスと等しいid='q11'の子要素にlargeというクラスを追加せよ。
 $('#q10').find('li').click(function() {
   var num = $(this).index();
+  //「eq()」は、複数のHTML要素の中からインデックス番号を指定することで特定の要素だけを取得できます。
   $('#q11').find('li').eq(num).addClass('large');
 });
 
