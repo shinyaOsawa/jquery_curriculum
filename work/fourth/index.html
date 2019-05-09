@@ -48,7 +48,7 @@
     <script src="../../common/js/jquery.js"></script>
     <script>
       // 今回やるのはドロップメニューです。
-      // メニューをhoverすると隠れている中のメニsューが表示され、メニューから離れると中のメニューが非表示されるプログラムです。
+      // メニューをhoverすると隠れている中のメニューが表示され、メニューから離れると中のメニューが非表示されるプログラムです。
       // [使用するメソッド]
       // .hover(関数, 関数) 要素の上にマウスカーソルが乗ると第1引数の関数を実行し、マウスカーソルから離れると第2引数の関数を実行します。
       // .slideDown() 要素がスライドしながら表示されます。
@@ -58,11 +58,13 @@
       // .stop() 現在動作中のアニメーション処理を全て中止します。
 
     $(function() {
-        $('.menu__list__title').hover(function() {
-          $(this).next().stop().slideDown(200);
-        // $(this).parent().children().slideDown(200);
+        $('.menu__list__title').parent().hover(function() {
+          //jqueryのアニメーションは、１つのアニメ動作が完了してからでないと次のアニメを開始しない仕様になっている。
+          //slideDown/slideUpメソッドの直前にstopメソッドを追加する。stopメソッドは現在実行しているアニメーションを停止させる関数なのですが、これを実行してからslideDown/slideUpなどのアニメーション関数を呼び出すと、現在実行しているアニメーションを破棄して、新しく呼ばれたアニメーションを即実行します。
+          //そうすると、ホバーが外れた瞬間に、hoverメソッドで指定した第二引数のslideUpメソッドが開始される。
+          $(this).children().stop().slideDown(200);
         }, function(){
-          $(this).next().stop().slideUp(200);
+          $('.menu__list__childList').stop().slideUp(200);
         });
 
     });
