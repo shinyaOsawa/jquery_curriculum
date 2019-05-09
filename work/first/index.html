@@ -82,11 +82,23 @@ $(function() {
   });
 
 // 第3問  id='q3'の要素をクリックしたら2秒かけてフェードアウトさせよ。
-  $('#q3').click(fadeout);
+
+        // $('#q3').click(fadeout());
+        // function fadeout(){
+        //   $('#q3').fadeOut(2000);
+        // }
+    //clickメソッドの引数でそのままfadeout()と実行すると、クリックイベントによる発動でなく、ページを開いた瞬間から発動されてしまう。
+
+
+    $('#q3').click(function() {
+      fadeout();
+    });
     function fadeout(){
     //fadeOut()メソッドは、引数に指定した時間（ミリ秒）で、フェードアウトする。
-    $(this).fadeOut(2000);
-  }
+    //このthisは、クリックイベントが発火した時に渡される。
+    $('#q3').fadeOut(2000);
+    }
+
 
 
 // 第4問  id='q4'の要素をクリックしたらこの要素の前後とこの要素内の前後にテキストを挿入せよ。
@@ -105,7 +117,7 @@ $(function() {
 
 // 第5問  id='q5'の要素をクリックしたらこの要素にlargeというクラスを付与せよ。
   $('#q5').click(function() {
-    //addClass() 引数で指定したclassを追加する。
+    //addClass() 引数で指定したclassを追加する。引数のクラス名には.をつけないので注意。クラス名に指定したい文字列
     $(this).addClass('large');
   });
 
@@ -114,7 +126,7 @@ $(function() {
     //animate({ }, ミリ秒)。メソッドなので後ろに()を伴うが、ここにobjectオブジェクトを設定する必要がある。
     //animateメソッドで操作できる属性は、width,height,left,top,opacityなど、１０進数の値で設定できるものに限られる。また、属性名にハイフンが含まれるものはハイフンを外して続く最初の文字を大文字にする（いわゆるキャメルケースの形）。
     $(this).animate({
-      marginTop: "100px",
+      "margin-top" : "100px",
       marginLeft: "100px"
     }, 2000);
   });
