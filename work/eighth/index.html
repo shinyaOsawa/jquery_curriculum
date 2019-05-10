@@ -46,7 +46,7 @@
 
         //windowオブジェクトの下位にdocumentオブジェクトがある。window.documentとも書けるが、省略が可能。
         //windowオブジェクトの中には、スクロールバーやアドレスバーが含まれるが、documentオブジェクトはページ自体。
-        //documentを指定するときは''がいらないのはなぜ。
+        //documentを指定するときは''がいらない。
         $(document).scroll(function(){
           //scrollTopメソッド　引数がない場合は、指定した要素のY座標を取得する。
           var scr_count = $(this).scrollTop();
@@ -60,6 +60,7 @@
 
         $('.scrollTopBtn').click(function(){
           //scrollTopに指定する対象は、ブラウザによってhtmlかbodyのどちらかとなる。ブラウザ毎にhtml、bodyの扱いが異なる。
+          //htmlはページのソースコードにおける全体を指すドキュメントであるので、スクロールイベントは発火しない。
           $('html, body').animate({scrollTop: 0});
         });
 
@@ -73,6 +74,9 @@
           // $('html, body').animate({scrollTop: targetY});
           console.log(targetY);
         });
+
+        //eachでclass titleがついてるものを回して、clickされたclass menu__btnのカスタムデータ属性と一致していたらanimate()メソッドを実行するという書き方もある。
+
 
         // $('.menu__btn[data-scroll-place-type="home"]').click(function(){
         //   var targetY = $('.title[data-scroll-place-type="home"]').offset().top;
