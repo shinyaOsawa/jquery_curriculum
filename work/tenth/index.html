@@ -24,6 +24,8 @@
         <ul class="lists"></ul>
       </div>
     </div>
+
+
     <script src="../../common/js/jquery.js"></script>
     <script>
       // 楽天ブックスの総合検索APIを使って製作してください。
@@ -66,8 +68,87 @@
       //  </div>
       // </li>
       //
+
       //
       //
+      $(function(){
+        var nestedDom = "";
+        var searchWord = "";
+        var pageNum = 0;
+        var array =[];
+        // on()メソッドのクリックイベントで関数を実行。
+        $('#js-search-button').on('click', function(){
+          searchWord = $('#js-search-word').val();
+          getPage();
+
+          $.ajax({
+            url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+            type: 'GET',
+            datatype: 'json',
+            data: {
+              // 「区分:サービス固有パラメーター」を確認して、必要な情報をdata内に入れましょう。
+              //アプリID　（デベロッパーID)
+              applicationId: '1019399324990976605',
+              //楽天ブックスジャンルID booksGenreId=001（本）に所属するジャンルのみが指定できます。
+              booksGenreId: '001',
+              //検索キーワード　128文字以内。半角2文字以上、全角1文字以上
+              keyword: searchWord,
+              //1ページあたりの取得件数。1〜30までの整数。
+              hits: 20,
+              //取得ページ数　1~100までの整数。
+              page: pageNum
+            }
+          }).done(function(data) {
+             success(data);
+          }).fail(function(data) {
+            $('.lists').prepend('エラー：' + data.responseText + 'が発生しています');
+            console.log(data.responseText);
+          });
+        }); //clickイベント
+
+        function getPage() {
+          array.push(searchWord);
+          console.log(array);
+          if (array[array.length-1] === array[array.length-2]) {
+              // console.log('一致');
+            pageNum += 1;
+          } else {
+              // console.log('WRONG!!!!!');
+            $('.lists').empty();
+            pageNum = 1;
+          }
+          return pageNum;
+        }
+
+        function success(data) {
+          $.each(data.Items, function(index, value){
+            // console.log(data);
+            // console.log(value);
+            //・Item.itemUrl　：　商品URL
+            //・Item.largemageUrl　：　商品画像 200x200URL
+            //・Item.title　：　書籍タイトル
+            //・Item.author　：　著者名
+            //・Item.publisherName　：　出版社名
+            nestedDom += "<li class='lists__item'>\n\
+            <div class='lists__item__inner'>\n\
+               <a href='" + value.Item.itemUrl + "'class='lists__item__link' target='_blank'>\n\
+               <img src='" + value.Item.largeImageUrl + "' class='lists__item__img' alt>\n\
+                 <p class='lists__item__detail'>作品名：　" + value.Item.title + "</p>\n\
+                 <p class='lists__item__detail'>作者　：　" + value.Item.author + "</p>\n\
+                 <p class='lists__item__detail'>出版社：　" + value.Item.publisherName + "</p>\n\
+               </a>\n\
+             </div>\n\
+            </li>";
+          }); // each
+            //prepend()メソッド 引数に指定したnestedDom変数をlistクラスが付与されたulタグ要素内の前に追加。
+            $('.lists').prepend(nestedDom);
+            nestedDom = "";
+          }
+
+      }); //jQuery閉じ
+
+
+
     </script>
   </body>
 </html>

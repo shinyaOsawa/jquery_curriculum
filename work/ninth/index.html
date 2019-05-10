@@ -48,52 +48,56 @@
 
       $(function() {
 
+        var nestedDom = "";
+
+
+        //$.ajax関数は、戻り値として XMLHttpRequestオブジェクトを返す。このオブジェクトを介してクライアント側とサーバ側は通信を行います。
         $.ajax({
-          url: './data.json'
-        }).done(function(json) {
-          for(var i=0; i < json.colorsArray.length; i++) {
-            var color = (json.colorsArray[i].hexValue);
-            var title = (json.colorsArray[i].colorName);
+          //通信を行うサーバー側にあるファイルのパスを指定。
+          url: './data.json',
+          //type デフォルトはGETメソッドなので省略可。「GET」は、基本的にサーバーからデータを取得することを目的に通信を行いますが、少量のデータであれば送信を行うことも可能です。「GET」で送信処理を行う場合は、URLに「?」を付けて任意のデータを送信する必要があります。
+          //「POST」は、基本的に大容量のデータを送信することを目的に通信を行いますが、もちろんデータの取得も可能です。
+          type: 'GET',
+          //dataTypeがxml, json, script, html位は自動的に判断してくれるので省略可。
+          dataType: 'json'
+        //フォームの送信に成功した場合の処理
+        }).done(function(data) {
+          var nestedDom = "";
+          //$.each()メソッド　第一引数が配列、第二引数に関数。関数は２つ引数をとることができて、第一引数は配列のインデックス番号、第二引数は要素の値が渡される。
+          $.each(data.colorsArray, function(index, value) {
+            //加算代入演算子を用いて、data.colorsArray配列をループ処理するたびに、変数nestedDomにHTML要素を追加していく。
+            //要素の値.keyでvalueを取得する。
+            nestedDom += "<li class='colorList__item'>\n\
+              <p class='colorList__title' style='background-color:" + value.hexValue + ";'>" + value.colorName + "</p>\n\
+            </li>";
+          });
+          //html()メソッドで変数nestedDomの内容を、空のULタグの要素の中身に追加する。
+          $('.colorList').html(nestedDom);
 
-
-            var colorList = $('<li class="colorList__item">').append('<p class="colorList__title" style="background-color:' + color + ';">' + title + '</p>');
-            $('.colorList').append(colorList);
-        }
         });
       });
 
 
-        // $.ajax({
-        //   type: 'GET',
-        // 	url: './data.json',
-        //   data: {name: 'colorName'},
-        // 	dataType: 'json',
-        // 	success: function(data){
-        //     var len = data.length;
-        //     for(var i=0; i < len; i++){
-        //       console.log(data[i].colorName);
-        //     }
-        //   }
-        // });
-        //
-        // $.each(data, function(i){
-        //   console.log(data[i].colorName + "[]" + data[i].hexValue);
-        //     });
-        //   }
-        // });
-        // .done(function(
-        //   for(var i in data){
-        //       var colorName = data[i].colorName;
-        //       console.log(colorName);
-              // var hexValue = data[i].hexValue;
-              // console.log(hexValue);
-          // });
-
-
-        // var colorList = $('<li class="colorList__item">').append('<p class="colorList__title" style="background-color:' + color + ';"></p>');
-        // $('.colorList').append(colorList);
-
+      // $(function() {
+      //
+      //   $.ajax({
+      //     url: './data.json'
+      //   }).done(function(data) {
+      //     for(var i=0; i < data.colorsArray.length; i++) {
+      //       var color = (data.colorsArray[i].hexValue);
+      //       var title = (data.colorsArray[i].colorName);
+      //
+      //
+      //       var colorList = $('<li class="colorList__item">').append('<p class="colorList__title" style="background-color:' + color + ';">' + title + '</p>');
+      //       $('.colorList').append(colorList);
+      //   }
+      //   });
       // });
+
+
+
+
+
       //
       // このテンプレートに取得してきた中身を入れて表示します。
     </script>
