@@ -37,13 +37,16 @@
 
       $(function() {
 
-        var width = $('.slider-list').children().width();
+        //eq(0)の指定は別に必要ないと思う。
+        var width = $('.slider-list').children().eq(0).width();
         // console.log(width);
 
+        //slider-listクラスの子要素の数を、変数lengthに代入
         var length = $('.slider-list').children().length;
         // lengthはプロパティであり、メソッドではないため、lengthの後ろにカッコ()を付けないということを覚えておきましょう
         // console.log(length);
 
+        //
         var array = [];
         for (i=0; i<length; i++) {
           array.push(-600 * i);
@@ -55,11 +58,13 @@
 
 //戻るボタンを押した際のクリックイベント
           $('.is-prev').click(function() {
+            //animateの処理中はis-nextやis-prevボタンを非活性にする。clickFlg変数を定義し、初期値はtrue、押した後にfalseとし、animateメソッドのコールバック関数でtrueに戻す。if文の条件分岐でclickFlgがtrueである時のみ、animateの処理を行うようにする。
             if (clickFlg === true) {
               clickFlg = false;
               // console.log(clickFlg);
+
+              //num===0、つまり一番左の画像の時、is-prevボタンを押下した際は、配列の添字が最後の要素を指定するようにnumにlength-1を代入する。。
                 if (num === 0) {
-                  //戻るボタンを押した時、num===0が、一番左の画像の時を表す。
                   num = length-1;
                   // console.log(num);
                   // console.log(array[num]);
@@ -67,6 +72,7 @@
                   num -= 1;
                   // console.log(num);
                 }
+                //animate()メソッドでオブジェクトを設定する。CSSのleftプロパティの値をarray[num] + 'px'に設定する。第2引数を省略すると、400ミリ秒に設定される。
                 $('.slider-list').animate({
                   'left': array[num] + 'px'
                 }, function() {
@@ -92,7 +98,8 @@
                 console.log(num);
               }
             $('.slider-list').animate({
-              'left': array[num] + 'px'
+              // 'left': array[num] + 'px'
+              left : array[num] + 'px'
             }, function() {
               clickFlg = true;
             });

@@ -44,8 +44,13 @@
       // .fadeOut() 要素をフェードアウトさせる。
       $(function() {
 
-        $(window).scroll(function(){
-          var scr_count = $(document).scrollTop();
+        //windowオブジェクトの下位にdocumentオブジェクトがある。window.documentとも書けるが、省略が可能。
+        //windowオブジェクトの中には、スクロールバーやアドレスバーが含まれるが、documentオブジェクトはページ自体。
+        //documentを指定するときは''がいらないのはなぜ。
+        $(document).scroll(function(){
+          //scrollTopメソッド　引数がない場合は、指定した要素のY座標を取得する。
+          var scr_count = $(this).scrollTop();
+          // console.log(scr_count);
           if (scr_count > 100) {
             $('.scrollTopBtn').fadeIn();
           } else {
@@ -54,24 +59,35 @@
         });
 
         $('.scrollTopBtn').click(function(){
+          //scrollTopに指定する対象は、ブラウザによってhtmlかbodyのどちらかとなる。ブラウザ毎にhtml、bodyの扱いが異なる。
           $('html, body').animate({scrollTop: 0});
-          //scrollTopに指定する対象は、ブラウザによってhtmlかbodyのどちらかとなる。
         });
 
-        $('.menu__btn[data-scroll-place-type="home"]').click(function(){
-          var targetY = $('.title[data-scroll-place-type="home"]').offset().top;
-          $('html, body').animate({scrollTop: targetY});
+        $('.menu__btn').click(function(){
+          var scrollType = $(this).data('scroll-place-type');
+          console.log(scrollType);
+          //offset().top　documentの上端からの相対位置を取得。
+          var targetY = $('.title[data-scroll-place-type = ' + scrollType + ']').offset().top;
+          //htmlのスクロールトッププロパティがtargetYの箇所にanimateする。
+          $(document.documentElement).animate({scrollTop: targetY});
+          // $('html, body').animate({scrollTop: targetY});
+          console.log(targetY);
         });
 
-        $('.menu__btn[data-scroll-place-type="news"]').click(function(){
-          var targetY = $('.title[data-scroll-place-type="news"]').offset().top;
-          $('html, body').animate({scrollTop: targetY});
-        });
-
-        $('.menu__btn[data-scroll-place-type="about"]').click(function(){
-          var targetY = $('.title[data-scroll-place-type="about"]').offset().top;
-          $('html, body').animate({scrollTop: targetY});
-        });
+        // $('.menu__btn[data-scroll-place-type="home"]').click(function(){
+        //   var targetY = $('.title[data-scroll-place-type="home"]').offset().top;
+        //   $('html, body').animate({scrollTop: targetY});
+        // });
+        //
+        // $('.menu__btn[data-scroll-place-type="news"]').click(function(){
+        //   var targetY = $('.title[data-scroll-place-type="news"]').offset().top;
+        //   $('html, body').animate({scrollTop: targetY});
+        // });
+        //
+        // $('.menu__btn[data-scroll-place-type="about"]').click(function(){
+        //   var targetY = $('.title[data-scroll-place-type="about"]').offset().top;
+        //   $('html, body').animate({scrollTop: targetY});
+        // });
 
       });
     </script>
