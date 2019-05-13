@@ -69,22 +69,26 @@
       // </li>
       //
 
-      //
+      //APIとは、ソフトウェアの機能を共有すること
+      //APIとは、事故ソフトウェアの一部交換して、他のソフトウェアと機能を共有できるようにしたもの。誰でも外部から利用できるようになる。それによって、自分のソフトウェアに他のソフトウェアの機能を埋め込むことができるようになる。
       //
       $(function(){
         var nestedDom = "";
         var searchWord = "";
-        var pageNum = 0;
-        var array =[];
+        var lastsearchWord = "";
+        var pageNum = 1;
+
         // on()メソッドのクリックイベントで関数を実行。
         $('#js-search-button').on('click', function(){
           searchWord = $('#js-search-word').val();
+
           getPage();
 
           $.ajax({
             url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
             type: 'GET',
             datatype: 'json',
+            //data サーバに送信する値。オブジェクトでも文字列でもOK。
             data: {
               // 「区分:サービス固有パラメーター」を確認して、必要な情報をdata内に入れましょう。
               //アプリID　（デベロッパーID)
@@ -94,35 +98,39 @@
               //検索キーワード　128文字以内。半角2文字以上、全角1文字以上
               keyword: searchWord,
               //1ページあたりの取得件数。1〜30までの整数。
-              hits: 20,
+              hits: 1,
               //取得ページ数　1~100までの整数。
               page: pageNum
             }
           }).done(function(data) {
              success(data);
           }).fail(function(data) {
-            $('.lists').prepend('エラー：' + data.responseText + 'が発生しています');
-            console.log(data.responseText);
+            pageNum -= 1;
+            // $('.lists').prepend('エラー：' + data.responseText + 'が発生しています');
+            //★data.responseJSONを用いて、応じた文字列を作って処理を振り分ける。
+            //alert('エラー：' + data.responseText + 'が発生しています。');
+            errorAction(data);
+
           });
         }); //clickイベント
 
         function getPage() {
-          array.push(searchWord);
-          console.log(array);
-          if (array[array.length-1] === array[array.length-2]) {
-              // console.log('一致');
+          if (lastsearchWord === searchWord) {
+            console.log(true);
+            console.log(lastsearchWord);
             pageNum += 1;
           } else {
-              // console.log('WRONG!!!!!');
-            $('.lists').empty();
+            console.log(false);
             pageNum = 1;
+            nestedDom = "";
+            $('.lists').empty();
+            lastsearchWord = searchWord;
           }
-          return pageNum;
         }
 
         function success(data) {
           $.each(data.Items, function(index, value){
-            // console.log(data);
+            console.log(data);
             // console.log(value);
             //・Item.itemUrl　：　商品URL
             //・Item.largemageUrl　：　商品画像 200x200URL
@@ -143,6 +151,32 @@
             //prepend()メソッド 引数に指定したnestedDom変数をlistクラスが付与されたulタグ要素内の前に追加。
             $('.lists').prepend(nestedDom);
             nestedDom = "";
+          }
+
+          function errorAction(data) {
+            if (data.readyState === 0) {
+              console.log(data);
+              alert('サーバーと接続できません');
+            } else if (data.readyState === 4) {
+              console.log(data.status);
+              switch (data.status) {
+                case 400:
+                  alert('パラメーターが不足しています。ひらがな、カタカナ、記号、半角英数字は2文字以上で指定してください');
+                  break;
+                case 404:
+                  alert('対象のデータが存在しません');
+                  break;
+                case 429:
+                  alert('リクエスト過多です');
+                  break;
+                case 500:
+                  alert('楽天Webサービスのシステムエラーです');
+                  break;
+                case 503:
+                  alert('アクセスが混み合っております')
+                  break;
+              }
+            }
           }
 
       }); //jQuery閉じ
