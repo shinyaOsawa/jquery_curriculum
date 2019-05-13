@@ -60,11 +60,15 @@
           type: 'GET',
           //dataTypeがxml, json, script, html位は自動的に判断してくれるので省略可。
           dataType: 'json'
+
         //フォームの送信に成功した場合の処理
         }).done(function(data) {
-          var nestedDom = "";
           //$.each()メソッド　第一引数が配列、第二引数に関数。関数は２つ引数をとることができて、第一引数は配列のインデックス番号、第二引数は要素の値が渡される。
           $.each(data.colorsArray, function(index, value) {
+            // console.log(data.colorsArray);
+            // console.log(index);
+            // console.log(this); //valueと同じ。
+            // console.log(value);
             //加算代入演算子を用いて、data.colorsArray配列をループ処理するたびに、変数nestedDomにHTML要素を追加していく。
             //要素の値.keyでvalueを取得する。
             nestedDom += "<li class='colorList__item'>\n\
