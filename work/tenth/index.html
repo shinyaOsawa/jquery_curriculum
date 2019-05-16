@@ -127,57 +127,71 @@
         }
 
         function success(data) {
-          $.each(data.Items, function(index, value){
-            console.log(data);
-            // console.log(value);
-            //・Item.itemUrl　：　商品URL
-            //・Item.largemageUrl　：　商品画像 200x200URL
-            //・Item.title　：　書籍タイトル
-            //・Item.author　：　著者名
-            //・Item.publisherName　：　出版社名
-            nestedDom += "<li class='lists__item'>\n\
-            <div class='lists__item__inner'>\n\
-               <a href='" + value.Item.itemUrl + "'class='lists__item__link' target='_blank'>\n\
-               <img src='" + value.Item.largeImageUrl + "' class='lists__item__img' alt>\n\
-                 <p class='lists__item__detail'>作品名：　" + value.Item.title + "</p>\n\
-                 <p class='lists__item__detail'>作者　：　" + value.Item.author + "</p>\n\
-                 <p class='lists__item__detail'>出版社：　" + value.Item.publisherName + "</p>\n\
-               </a>\n\
-             </div>\n\
-            </li>";
-          }); // each
-            //prepend()メソッド 引数に指定したnestedDom変数をlistクラスが付与されたulタグ要素内の前に追加。
-            $('.lists').prepend(nestedDom);
-            //nestedDomを初期化。
-            nestedDom = "";
+          //count　：　検索数
+          if (data.count > 0) {
+            // console.log(data.count);
+            $.each(data.Items, function(index, value){
+              console.log(data);
+              // console.log(value);
+              //・Item.itemUrl　：　商品URL
+              //・Item.largemageUrl　：　商品画像 200x200URL
+              //・Item.title　：　書籍タイトル
+              //・Item.author　：　著者名
+              //・Item.publisherName　：　出版社名
+              nestedDom += "<li class='lists__item'>\n\
+              <div class='lists__item__inner'>\n\
+                 <a href='" + value.Item.itemUrl + "'class='lists__item__link' target='_blank'>\n\
+                 <img src='" + value.Item.largeImageUrl + "' class='lists__item__img' alt>\n\
+                   <p class='lists__item__detail'>作品名：　" + value.Item.title + "</p>\n\
+                   <p class='lists__item__detail'>作者　：　" + value.Item.author + "</p>\n\
+                   <p class='lists__item__detail'>出版社：　" + value.Item.publisherName + "</p>\n\
+                 </a>\n\
+               </div>\n\
+              </li>";
+            }); // each
+              //prepend()メソッド 引数に指定したnestedDom変数をlistクラスが付与されたulタグ要素内の前に追加。
+              $('.lists').prepend(nestedDom);
+              //nestedDomを初期化。
+              nestedDom = "";
+            } else {
+            alert('検索結果がありませんでした。他のキーワードで検索してください。');
+            }
           }
 
+
           function errorAction(data) {
-            // console.log(data);
+            console.log(data);
             if (lastTimeWord = searchWord){
               pageNum--;
             }
 
             let text;
+            console.log(data.responseJSON.error_description);
             if (data.readyState === 0) {
               text = 'サーバーと接続できません';
             } else if (data.readyState === 4) {
               // console.log(data.status);
-              switch (data.status) {
-                case 400:
-                  text = 'パラメーターが不足しています。ひらがな、カタカナ、記号、半角英数字は2文字以上で指定してください';
+              switch (data.responseJSON.error_description) {
+                case 'specify valid applicationId':
+                  text = '楽天APIのアプリケーションIDが指定されていません。';
                   break;
-                case 404:
-                  text = '対象のデータが存在しません';
+                case 'keyword length must be over 2 characters':
+                  text = 'パラメーターが不足しています。ひらがな、カタカナ、記号、半角英数字は２文字以上で指定してください。';
                   break;
-                case 429:
-                  text = 'リクエスト過多です';
+                case 'keyword must be set':
+                  text = 'キーワードを入力してください。';
                   break;
-                case 500:
-                  text = '楽天Webサービスのシステムエラーです';
+                case 'not_found':
+                  text = '対象のデータが存在しません。';
                   break;
-                case 503:
-                  text = 'アクセスが混み合っております';
+                case 'number of allowed requests has been exceeded for this API. please try again soon.':
+                  text = 'リクエストが上限に達しました。少し時間をあけてからご利用ください。';
+                  break;
+                case 'api logic error':
+                  text = '楽天Webサービスのシステムエラーです。';
+                  break;
+                case 'https://webservice.rakuten.co.jp/api/bookstotalsearch/ is under maintenance':
+                  text = '楽天Booksはメンテナンス中です。';
                   break;
               }
             }
