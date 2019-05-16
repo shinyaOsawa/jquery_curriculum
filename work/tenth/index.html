@@ -75,7 +75,7 @@
       $(function(){
         var nestedDom = "";
         var searchWord = "";
-        var lastsearchWord = "";
+        var lastTimeWord = "";
         var pageNum = 1;
 
         // on()メソッドのクリックイベントで関数を実行。
@@ -105,26 +105,24 @@
           }).done(function(data) {
              success(data);
           }).fail(function(data) {
-            pageNum -= 1;
-            // $('.lists').prepend('エラー：' + data.responseText + 'が発生しています');
             //★data.responseJSONを用いて、応じた文字列を作って処理を振り分ける。
-            //alert('エラー：' + data.responseText + 'が発生しています。');
             errorAction(data);
 
           });
         }); //clickイベント
 
+        //page数を取得する関数。前回の検索した時のキーワードと今回検索したキーワードが一致している場合にpageNumに１を足す。
         function getPage() {
-          if (lastsearchWord === searchWord) {
-            console.log(true);
-            console.log(lastsearchWord);
-            pageNum += 1;
+          if (lastTimeWord === searchWord) {
+            // console.log(true);
+            // console.log(lastTimeWord);
+            pageNum++;
           } else {
-            console.log(false);
+            // console.log(false);
             pageNum = 1;
-            nestedDom = "";
             $('.lists').empty();
-            lastsearchWord = searchWord;
+            //lastTimeWordにsearchWordを代入するのは、lastTimeWordとsearchWordが異なる時だけで良い。
+            lastTimeWord = searchWord;
           }
         }
 
@@ -150,33 +148,40 @@
           }); // each
             //prepend()メソッド 引数に指定したnestedDom変数をlistクラスが付与されたulタグ要素内の前に追加。
             $('.lists').prepend(nestedDom);
+            //nestedDomを初期化。
             nestedDom = "";
           }
 
           function errorAction(data) {
+            // console.log(data);
+            if (lastTimeWord = searchWord){
+              pageNum--;
+            }
+
+            let text;
             if (data.readyState === 0) {
-              console.log(data);
-              alert('サーバーと接続できません');
+              text = 'サーバーと接続できません';
             } else if (data.readyState === 4) {
-              console.log(data.status);
+              // console.log(data.status);
               switch (data.status) {
                 case 400:
-                  alert('パラメーターが不足しています。ひらがな、カタカナ、記号、半角英数字は2文字以上で指定してください');
+                  text = 'パラメーターが不足しています。ひらがな、カタカナ、記号、半角英数字は2文字以上で指定してください';
                   break;
                 case 404:
-                  alert('対象のデータが存在しません');
+                  text = '対象のデータが存在しません';
                   break;
                 case 429:
-                  alert('リクエスト過多です');
+                  text = 'リクエスト過多です';
                   break;
                 case 500:
-                  alert('楽天Webサービスのシステムエラーです');
+                  text = '楽天Webサービスのシステムエラーです';
                   break;
                 case 503:
-                  alert('アクセスが混み合っております')
+                  text = 'アクセスが混み合っております';
                   break;
               }
             }
+            alert(text);
           }
 
       }); //jQuery閉じ
